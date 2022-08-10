@@ -35,15 +35,23 @@ export class GildedRose {
 
   private updateExpired(item: Item) {
     if (item.name != "Aged Brie") {
-      if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-        if (item.quality > 0) {
-          this.decreaseQuality(item);
-        }
-      } else {
-        this.updateExpiredBackstagePasses(item);
-      }
+      this.updateExpiredNotBrie(item);
     } else {
       this.updateExpiredAgedBrie(item);
+    }
+  }
+
+  private updateExpiredNotBrie(item: Item) {
+    if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
+      this.updateExpiredIfPositiveQuality(item);
+    } else {
+      this.updateExpiredBackstagePasses(item);
+    }
+  }
+
+  private updateExpiredIfPositiveQuality(item: Item) {
+    if (item.quality > 0) {
+      this.decreaseQuality(item);
     }
   }
 
@@ -70,13 +78,11 @@ export class GildedRose {
   }
 
   private doUpdateQuality(item: Item) {
-    if (item.name != "Aged Brie" &&
-      item.name != "Backstage passes to a TAFKAL80ETC concert") {
-      if (item.quality > 0) {
-        if (item.name != "Sulfuras, Hand of Ragnaros") {
-          item.quality = item.quality - 1;
-        }
-      }
+    if (
+      item.name != "Aged Brie" &&
+      item.name != "Backstage passes to a TAFKAL80ETC concert"
+    ) {
+      this.newMethod(item);
     } else {
       if (item.quality < 50) {
         item.quality = item.quality + 1;
@@ -92,6 +98,14 @@ export class GildedRose {
             }
           }
         }
+      }
+    }
+  }
+
+  private newMethod(item: Item) {
+    if (item.quality > 0) {
+      if (item.name != "Sulfuras, Hand of Ragnaros") {
+        item.quality = item.quality - 1;
       }
     }
   }
