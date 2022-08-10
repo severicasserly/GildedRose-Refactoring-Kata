@@ -2,18 +2,24 @@ export class Item {
   name: string;
   sellIn: number;
   quality: number;
-  
+
   constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
   }
-  
-    doDecreaseQuality() {
-      if (this.name != "Sulfuras, Hand of Ragnaros") {
-        this.quality = this.quality - 1;
-      }
+
+  doDecreaseQuality() {
+    if (this.name != "Sulfuras, Hand of Ragnaros") {
+      this.quality = this.quality - 1;
     }
+  }
+
+  doIncreaseQuality() {
+    if (this.quality < 50) {
+      this.quality = this.quality + 1;
+    }
+  }
 }
 
 export class GildedRose {
@@ -103,9 +109,7 @@ export class GildedRose {
   }
 
   private doIncreaseQuality(item: Item) {
-    if (item.quality < 50) {
-      item.quality = item.quality + 1;
-    }
+    item.doIncreaseQuality();
   }
 
   private increaseQualityOfBackstagePassesSoon(item: Item) {
