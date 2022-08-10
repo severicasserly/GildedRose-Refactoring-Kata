@@ -2,12 +2,18 @@ export class Item {
   name: string;
   sellIn: number;
   quality: number;
-
+  
   constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
   }
+  
+    doDecreaseQuality() {
+      if (this.name != "Sulfuras, Hand of Ragnaros") {
+        this.quality = this.quality - 1;
+      }
+    }
 }
 
 export class GildedRose {
@@ -43,21 +49,9 @@ export class GildedRose {
 
   private updateExpiredNotBrie(item: Item) {
     if (item.name != "Backstage passes to a TAFKAL80ETC concert") {
-      this.updateExpiredIfPositiveQuality(item);
+      this.decreaseQuality(item);
     } else {
       this.updateExpiredBackstagePasses(item);
-    }
-  }
-
-  private updateExpiredIfPositiveQuality(item: Item) {
-    if (item.quality > 0) {
-      this.decreaseQuality(item);
-    }
-  }
-
-  private decreaseQuality(item: Item) {
-    if (item.name != "Sulfuras, Hand of Ragnaros") {
-      item.quality = item.quality - 1;
     }
   }
 
@@ -82,31 +76,51 @@ export class GildedRose {
       item.name != "Aged Brie" &&
       item.name != "Backstage passes to a TAFKAL80ETC concert"
     ) {
-      this.newMethod(item);
+      this.decreaseQuality(item);
     } else {
-      if (item.quality < 50) {
-        item.quality = item.quality + 1;
-        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-          if (item.sellIn < 11) {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
-            }
-          }
-          if (item.sellIn < 6) {
-            if (item.quality < 50) {
-              item.quality = item.quality + 1;
-            }
-          }
-        }
-      }
+      this.increaseQuality(item);
     }
   }
 
-  private newMethod(item: Item) {
-    if (item.quality > 0) {
-      if (item.name != "Sulfuras, Hand of Ragnaros") {
-        item.quality = item.quality - 1;
-      }
+  private increaseQuality(item: Item) {
+    if (item.quality < 50) {
+      item.quality = item.quality + 1;
+      this.increaseQualityOfBackstagePasses(item);
     }
+  }
+
+  private increaseQualityOfBackstagePasses(item: Item) {
+    if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+      this.increaseQualityOfBackstagePassesSoon(item);
+      this.increaseQualityOfBackstagePassesVerySoon(item);
+    }
+  }
+
+  private increaseQualityOfBackstagePassesVerySoon(item: Item) {
+    if (item.sellIn < 6) {
+      this.doIncreaseQuality(item);
+    }
+  }
+
+  private doIncreaseQuality(item: Item) {
+    if (item.quality < 50) {
+      item.quality = item.quality + 1;
+    }
+  }
+
+  private increaseQualityOfBackstagePassesSoon(item: Item) {
+    if (item.sellIn < 11) {
+      this.doIncreaseQuality(item);
+    }
+  }
+
+  private decreaseQuality(item: Item) {
+    if (item.quality > 0) {
+      this.doDecreaseQuality(item);
+    }
+  }
+
+  private doDecreaseQuality(item: Item) {
+    item.doDecreaseQuality();
   }
 }
